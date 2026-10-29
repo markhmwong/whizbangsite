@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="apple-itunes-app" content="app-id=1629437867">
+<title>A Celebrate event</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 17px/1.5 -apple-system, system-ui, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f2f1f6; color: #222; }
+  @media (prefers-color-scheme: dark) { body { background: #111; color: #eee; } }
+  main { max-width: 26rem; padding: 2rem 1.5rem; text-align: center; }
+  .card { background: #91bb9d; color: #26282f; border-radius: 22px; padding: 2rem 1.25rem; margin: 1.5rem 0; }
+  .card h1 { font-size: 1.6rem; margin: .25rem 0; overflow-wrap: anywhere; }
+  .card p { margin: .25rem 0; opacity: .8; }
+  .count { font-weight: 700; font-size: .85rem; opacity: 1 !important; }
+  .button { display: inline-block; background: #26282f; color: #fff; text-decoration: none; font-weight: 600; padding: .9rem 1.6rem; border-radius: 14px; }
+  @media (prefers-color-scheme: dark) { .button { background: #fff; color: #26282f; } }
+  .hint { font-size: .9rem; opacity: .7; margin-top: 1.25rem; }
+  [hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <div id="event" hidden>
+    <p>Someone shared an event with you.</p>
+    <div class="card" id="card">
+      <p class="count" id="count"></p>
+      <h1 id="name"></h1>
+      <p id="date"></p>
+      <p id="category"></p>
+    </div>
+  </div>
+  <div id="invalid" hidden>
+    <h1>This link doesn't work</h1>
+    <p>It isn't a complete Celebrate event. Ask whoever sent it to share it again.</p>
+  </div>
+  <p><a class="button" href="https://apps.apple.com/app/id1629437867">Get Celebrate</a></p>
+  <p class="hint" id="hint" hidden>Already installed it? Go back and tap the link again to add the event.</p>
+</main>
+<script>
+  // Everything stays in this page: the event lives in the #fragment, which browsers never send to a server.
+  (function () {
+    var params = new URLSearchParams(location.hash.slice(1).replace(/\+/g, "%2B"));
+    var name = (params.get("n") || "").trim();
+    var day = params.get("d") || "";
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+    var date = m && new Date(+m[1], +m[2] - 1, +m[3]);
+    var valid = name && date && date.getMonth() === +m[2] - 1 && date.getDate() === +m[3];
+    if (!valid) { document.getElementById("invalid").hidden = false; return; }
+
+    document.getElementById("name").textContent = name.slice(0, 200);
+    document.getElementById("date").textContent = date.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+    var cat = (params.get("cat") || "").trim();
+    var yearly = params.get("y") === "1";
+    document.getElementById("category").textContent = [cat, yearly ? "Every year" : ""].filter(Boolean).join(" · ");
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var days = Math.round((date - today) / 86400000);
+    document.getElementById("count").textContent = days < 0 ? "Past" : days === 0 ? "Today" : days === 1 ? "Tomorrow" : days + " days";
+    var c = params.get("c");
+    if (c && /^[0-9A-Fa-f]{6}$/.test(c)) document.getElementById("card").style.background = "#" + c;
+    document.getElementById("event").hidden = false;
+    document.getElementById("hint").hidden = false;
+  })();
+</script>
+</body>
+</html>

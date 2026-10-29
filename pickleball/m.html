@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>A Pickleball match</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 17px/1.5 -apple-system, system-ui, sans-serif; margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f2f1f6; color: #222; }
+  @media (prefers-color-scheme: dark) { body { background: #111; color: #eee; } }
+  main { max-width: 26rem; padding: 2rem 1.5rem; text-align: center; }
+  .card { background: linear-gradient(160deg, #1f7a5c, #123b4a); color: #fff; border-radius: 22px; padding: 2rem 1.25rem; margin: 1.5rem 0; }
+  .card h1 { font-size: 1.6rem; margin: .25rem 0; }
+  .card p { margin: .25rem 0; opacity: .85; }
+  .hint { font-size: .9rem; opacity: .7; margin-top: 1.25rem; }
+  [hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <div id="match" hidden>
+    <div class="card">
+      <h1>A pickleball match</h1>
+      <p>Someone shared a match with you.</p>
+    </div>
+    <p>Open this link on an iPhone with Pickleball installed to add the match to your history.</p>
+    <!-- Add a "Get Pickleball" App Store button (and an apple-itunes-app meta tag) once the app has an App Store ID. -->
+    <p class="hint">Already installed it? Go back and tap the link again.</p>
+  </div>
+  <div id="invalid" hidden>
+    <h1>This link doesn't work</h1>
+    <p>It isn't a complete Pickleball match. Ask whoever sent it to share it again.</p>
+  </div>
+</main>
+<script>
+  // The match lives in the #fragment, which browsers never send to a server. The page only checks it looks complete.
+  (function () {
+    var params = new URLSearchParams(location.hash.slice(1));
+    var valid = params.get("s") === "pb" && params.get("v") && params.get("f") && params.get("p");
+    document.getElementById(valid ? "match" : "invalid").hidden = false;
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "GEKZN86RYS.com.whizbang.Celebrate"
+        ],
+        "components": [
+          {
+            "/": "/celebrate/e*",
+            "comment": "Celebrate Shared Event links"
+          }
+        ]
+      },
+      {
+        "appIDs": [
+          "GEKZN86RYS.com.whizbang.pickleball"
+        ],
+        "components": [
+          {
+            "/": "/pickleball/m",
+            "comment": "Pickleball match claim links"
+          }
+        ]
+      }
+    ]
+  }
+}
